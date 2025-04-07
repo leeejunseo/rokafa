@@ -154,6 +154,12 @@ h6 {
   transform: scale(20);
 }
 
+.glightbox-clean .gdesc {
+  max-height: none !important;
+  overflow: visible !important;
+  white-space: normal !important;
+}
+
 @keyframes pulsate-play-btn {
   0% {
     transform: scale(0.6, 0.6);
