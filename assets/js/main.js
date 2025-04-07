@@ -105,8 +105,10 @@
   /**
    * Initiate glightbox
    */
-  const glightbox = GLightbox({
-    selector: '.glightbox'
+  const lightbox = GLightbox({
+    selector: '.glightbox',
+    descPosition: 'bottom',
+    moreLength: 0 // ✅ “See more” 강제 제거
   });
 
   /**
