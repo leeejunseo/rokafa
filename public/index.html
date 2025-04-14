@@ -53,7 +53,7 @@
       </a>
 
       <nav id="navmenu" class="navmenu">
-        <ul class="d-flex align-items-center justify-content-end flex-wrap gap-2 w-100 d-none d-xl-flex">
+        <ul class="d-flex align-items-center justify-content-end flex-wrap gap-2 w-100">
           <li><a href="#hero" class="active">홈<br></a></li>
           <li><a href="#about">공지사항</a></li>
           <li><a href="#menu">메인</a></li>
@@ -100,12 +100,14 @@
       
           if (data.loggedIn) {
             nav.innerHTML = `
-              <div class="d-flex flex-column align-items-end">
-                <span class="text-white fw-bold">${data.name}님 환영합니다!</span>
-                <form action="/logout" method="POST" class="mt-1">
-                  <button type="submit" class="btn btn-sm btn-outline-light">로그아웃</button>
+              <div class="d-flex flex-column align-items-end align-items-md-end text-end mt-2 px-2 w-100">
+                <span class="text-dark fw-bold small">${data.name}님 환영합니다!</span>
+                <form action="/logout" method="GET" class="mt-1">
+                  <button type="submit" class="btn btn-sm btn-outline-secondary text-dark">로그아웃</button>
                 </form>
-              </div>`;
+              </div>
+            `;
+
           } else {
             nav.innerHTML = `
               <div class="d-flex flex-column flex-sm-row gap-2">
@@ -117,22 +119,26 @@
       </script>
       
       <style>
+        #mobile-nav a {
+          color: white;
+          font-size: 1.2rem;
+          margin: 1rem 0;
+        }
+      
         @media (max-width: 768px) {
-          #navmenu ul {
-            display: none !important;
-          }
-      
+          /* 모바일 메뉴가 열릴 때만, 로그인 정보는 기존 메뉴 밖에서 따로 노출 */
           #nav-login-area {
-            display: none !important;
-          }
-      
-          #mobile-nav a {
-            color: white;
-            font-size: 1.2rem;
-            margin: 1rem 0;
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            z-index: 10;
           }
         }
       </style>
+      
       
 
 
