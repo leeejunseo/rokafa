@@ -2,10 +2,15 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+const path = require('path');
 const db = require('./db'); // db.js는 따로 있어야 합니다
-
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+app.use(express.static(path.join(__dirname, '../public')));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
 
 // 미들웨어 설정
 app.use(bodyParser.urlencoded({ extended: true }));
