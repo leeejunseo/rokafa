@@ -82,40 +82,48 @@
           mobileNav.classList.toggle('d-none');
         }
       
-        window.addEventListener("DOMContentLoaded", async () => {
+        window.onload = async function () {
           const res = await fetch('/user-info');
           const data = await res.json();
           const nav = document.getElementById('nav-login-area');
           const mobile = document.getElementById('mobile-login-area');
       
+          if (!nav || !mobile) return; // ❗ 안전장치
+      
           if (data.loggedIn) {
-            nav.innerHTML = `
+            const htmlDesktop = `
               <div class="d-flex flex-column align-items-end">
                 <span class="text-white fw-bold">${data.name}님 환영합니다!</span>
                 <form action="/logout" method="POST" class="mt-1">
                   <button type="submit" class="btn btn-sm btn-outline-light">로그아웃</button>
                 </form>
               </div>`;
-            mobile.innerHTML = `
+            const htmlMobile = `
               <div class="d-flex flex-column align-items-center text-white gap-2 mt-3">
                 <span class="fw-bold">${data.name}님 환영합니다!</span>
                 <form action="/logout" method="POST">
                   <button type="submit" class="btn btn-outline-light btn-sm w-75">로그아웃</button>
                 </form>
               </div>`;
+      
+            nav.innerHTML = htmlDesktop;
+            mobile.innerHTML = htmlMobile;
           } else {
-            nav.innerHTML = `
+            const htmlDesktop = `
               <div class="d-flex flex-column flex-sm-row gap-2">
                 <button class="btn btn-outline-primary btn-sm" onclick="closeMenuAndLogin()">로그인</button>
                 <button class="btn btn-outline-success btn-sm" onclick="closeMenuAndRegister()">회원가입</button>
               </div>`;
-            mobile.innerHTML = `
+            const htmlMobile = `
               <div class="d-flex flex-column align-items-center gap-2 mt-3">
                 <button class="btn btn-outline-light btn-sm w-75" onclick="closeMenuAndLogin()">로그인</button>
                 <button class="btn btn-outline-light btn-sm w-75" onclick="closeMenuAndRegister()">회원가입</button>
               </div>`;
+      
+            nav.innerHTML = htmlDesktop;
+            mobile.innerHTML = htmlMobile;
           }
-        });
+        }
       
         function closeMenuAndLogin() {
           toggleMobileMenu();
@@ -145,7 +153,7 @@
           }
       
           #mobile-login-area {
-            display: flex;
+            display: flex !important;
             flex-direction: column;
             align-items: center;
             gap: 1rem;
@@ -162,6 +170,7 @@
           }
         }
       </style>
+
 
     <!-- 로그인 모달 -->
     <div id="loginModal" class="modal" style="display:none;">
