@@ -41,30 +41,24 @@
 
 
 <body class="index-page">
-  
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container position-relative d-flex align-items-center justify-content-between">
-
+  
       <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.png" alt=""> -->
         <h1 class="sitename">공군사관학교 성무제</h1>
         <span>.</span>
       </a>
-
-      <nav id="navmenu" class="navmenu">
-        <ul class="d-flex align-items-center justify-content-end flex-wrap gap-2 w-100">
-          <li><a href="#hero" class="active">홈<br></a></li>
-          <li><a href="#about">공지사항</a></li>
-          <li><a href="#menu">메인</a></li>
-          <li><a href="#events">초청 연예인</a></li>
-          <li><a href="#gallery">타임라인</a></li>
-          <li><a href="#contact">마무리</a></li>
-          <li id="nav-login-area" class="ms-auto text-end"></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list" onclick="toggleMobileMenu()"></i>
+      <nav id="navmenu" class="navmenu d-flex align-items-center gap-3">
+        <!-- 햄버거 버튼 -->
+        <i class="mobile-nav-toggle bi bi-list" onclick="toggleMobileMenu()" style="font-size: 2rem; cursor: pointer;"></i>
       
-        <div id="mobile-nav" class="d-none d-xl-none flex-column align-items-center text-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-90 z-3" style="padding-top: 5rem;">
+        <!-- 로그인 후 사용자 이름 & 로그아웃 버튼이 여기 표시됨 -->
+        <div id="header-login-area" class="d-flex flex-column align-items-end text-end d-none">
+          <!-- JS로 표시 -->
+        </div>
+      
+        <!-- 모바일 전체 화면 메뉴 -->
+        <div id="mobile-nav" class="d-none flex-column align-items-center text-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-90 z-3" style="padding-top: 5rem;">
           <button class="btn-close btn-close-white position-absolute top-0 end-0 m-4" aria-label="Close" onclick="toggleMobileMenu()"></button>
           <a href="#hero" onclick="toggleMobileMenu()">홈</a>
           <a href="#about" onclick="toggleMobileMenu()">공지사항</a>
@@ -72,168 +66,215 @@
           <a href="#events" onclick="toggleMobileMenu()">초청 연예인</a>
           <a href="#gallery" onclick="toggleMobileMenu()">타임라인</a>
           <a href="#contact" onclick="toggleMobileMenu()">마무리</a>
-          <a href="javascript:void(0)" onclick="closeMenuAndLogin()">로그인</a>
-          <a href="javascript:void(0)" onclick="closeMenuAndRegister()">회원가입</a>
+          
+          <div class="mt-4" id="nav-login-area"></div>
         </div>
       </nav>
+      
       
       <script>
         function toggleMobileMenu() {
           const mobileNav = document.getElementById('mobile-nav');
           mobileNav.classList.toggle('d-none');
         }
-      
+  
         function closeMenuAndLogin() {
           toggleMobileMenu();
           openLoginModal();
         }
-      
+  
         function closeMenuAndRegister() {
           toggleMobileMenu();
           openRegisterModal();
         }
-      
+  
         window.addEventListener("DOMContentLoaded", async () => {
-          const res = await fetch('/user-info');
-          const data = await res.json();
-          const nav = document.getElementById('nav-login-area');
-      
-          if (data.loggedIn) {
-            nav.innerHTML = `
-              <div class="d-flex flex-column align-items-end align-items-md-end text-end mt-2 px-2 w-100">
-                <span class="text-dark fw-bold small">${data.name}님 환영합니다!</span>
-                <form action="/logout" method="GET" class="mt-1">
-                  <button type="submit" class="btn btn-sm btn-outline-secondary text-dark">로그아웃</button>
-                </form>
-              </div>
-            `;
+  const res = await fetch('/user-info');
+  const data = await res.json();
 
-          } else {
-            nav.innerHTML = `
-              <div class="d-flex flex-column flex-sm-row gap-2">
-                <button class="btn btn-outline-primary btn-sm" onclick="openLoginModal()">로그인</button>
-                <button class="btn btn-outline-success btn-sm" onclick="openRegisterModal()">회원가입</button>
-              </div>`;
-          }
-        });
+  const nav = document.getElementById('nav-login-area');            // 모바일 메뉴 내부
+  const headerLogin = document.getElementById('header-login-area'); // 상단 네비게이션 우측
+
+  if (data.loggedIn) {
+    // 1. 모바일 메뉴 내 로그인 UI
+    nav.innerHTML = `
+      <div class="d-flex flex-column align-items-center mt-4">
+        <span class="fw-bold text-dark small">${data.name}님 환영합니다!</span>
+        <form action="/logout" method="GET" class="mt-2">
+          <button type="submit" class="btn btn-sm btn-outline-dark">로그아웃</button>
+        </form>
+      </div>
+    `;
+
+    // 2. 상단 네비게이션 우측에 로그인 UI 표시
+    headerLogin.classList.remove('d-none');  // 숨김 해제
+    headerLogin.innerHTML = `
+      <span class="fw-bold text-dark small">${data.name}님 환영합니다!</span>
+      <form action="/logout" method="GET" class="mt-1">
+        <button type="submit" class="btn btn-sm btn-outline-dark">로그아웃</button>
+      </form>
+    `;
+  } else {
+    // 비로그인 상태 → 모바일 메뉴에만 로그인/회원가입 버튼 표시
+    nav.innerHTML = `
+      <div class="d-flex flex-column align-items-center gap-2 mt-4">
+        <button class="btn btn-outline-primary btn-sm" onclick="toggleMobileMenu(); openLoginModal()">로그인</button>
+        <button class="btn btn-outline-success btn-sm" onclick="toggleMobileMenu(); openRegisterModal()">회원가입</button>
+      </div>
+    `;
+    headerLogin.classList.add('d-none'); // 숨김
+  }
+});
+
+
       </script>
-      
-      <style>
-        #mobile-nav a {
-          color: white;
-          font-size: 1.2rem;
-          margin: 1rem 0;
+  
+  <style>
+    #mobile-nav a {
+      color: white;
+      font-size: 1.5rem;
+      margin: 0.6rem 0;
+      text-decoration: none;
+    }
+  
+    #mobile-nav button {
+      font-size: 1.1rem;
+      padding: 0.6rem 1.2rem;
+      min-width: 120px;
+      border-radius: 8px;
+    }
+  
+    #mobile-nav button.btn-outline-primary {
+      border-color: #0d6efd;
+      color: #0d6efd;
+      background-color: white;
+      font-weight: bold;
+    }
+  
+    #mobile-nav button.btn-outline-primary:hover {
+      background-color: #0d6efd;
+      color: white;
+    }
+  
+    #mobile-nav button.btn-outline-success {
+      border-color: #198754;
+      color: #198754;
+      background-color: white;
+      font-weight: bold;
+    }
+  
+    #mobile-nav button.btn-outline-success:hover {
+      background-color: #198754;
+      color: white;
+    }
+  
+    #nav-login-area {
+      margin-top: 1.5rem;
+      gap: 1rem;
+    }
+  
+    /* 전체 메뉴 정렬 */
+    #mobile-nav {
+      transition: all 0.3s ease-in-out;
+      justify-content: start;
+      padding-top: 5rem;
+    }
+  </style>
+  
+  
+      <!-- 로그인 모달 -->
+      <div id="loginModal" class="modal" style="display:none;">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">로그인</h5>
+              <button type="button" class="btn-close" onclick="closeLoginModal()"></button>
+            </div>
+            <form action="/login" method="POST">
+              <div class="modal-body">
+                <input type="text" name="student_id" placeholder="교번" class="form-control mb-2" required>
+                <input type="password" name="password" placeholder="비밀번호" class="form-control mb-2" required>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">로그인</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+  
+      <!-- 회원가입 모달 -->
+      <div id="registerModal" class="modal" style="display:none;">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">회원가입</h5>
+              <button type="button" class="btn-close" onclick="closeRegisterModal()"></button>
+            </div>
+            <form action="/register" method="POST">
+              <div class="modal-body">
+                <input type="text" name="name" placeholder="이름" class="form-control mb-2" required>
+                <input type="text" name="student_id" placeholder="교번" class="form-control mb-2" required>
+                <input type="password" name="password" placeholder="비밀번호" class="form-control mb-2" required>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success">가입하기</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+  
+      <!-- 예약 모달 -->
+      <div id="reserveModal" class="modal" style="display:none;">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">예약하기</h5>
+              <button type="button" class="btn-close" onclick="closeReserveModal()"></button>
+            </div>
+            <form action="/reserve" method="POST">
+              <div class="modal-body">
+                <select name="booth" class="form-control mb-2" required>
+                  <option value="도그파이트">도그파이트</option>
+                  <option value="면 위의 남자들">면 위의 남자들</option>
+                  <option value="초코딸기">초코딸기</option>
+                </select>
+                <input type="number" name="people" placeholder="인원 수" class="form-control mb-2" required>
+                <input type="text" name="time" placeholder="예약 시간" class="form-control mb-2" required>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-warning">예약하기</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+  
+      <script>
+        function openLoginModal() {
+          document.getElementById('loginModal').style.display = 'block';
         }
-      
-        @media (max-width: 768px) {
-          /* 모바일 메뉴가 열릴 때만, 로그인 정보는 기존 메뉴 밖에서 따로 노출 */
-          #nav-login-area {
-            position: absolute;
-            bottom: 1rem;
-            right: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            z-index: 10;
-          }
+        function closeLoginModal() {
+          document.getElementById('loginModal').style.display = 'none';
         }
-      </style>
-      
-      
-
-
-    <!-- 로그인 모달 -->
-    <div id="loginModal" class="modal" style="display:none;">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">로그인</h5>
-            <button type="button" class="btn-close" onclick="closeLoginModal()"></button>
-          </div>
-          <form action="/login" method="POST">
-            <div class="modal-body">
-              <input type="text" name="student_id" placeholder="교번" class="form-control mb-2" required>
-              <input type="password" name="password" placeholder="비밀번호" class="form-control mb-2" required>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">로그인</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 회원가입 모달 -->
-    <div id="registerModal" class="modal" style="display:none;">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">회원가입</h5>
-            <button type="button" class="btn-close" onclick="closeRegisterModal()"></button>
-          </div>
-          <form action="/register" method="POST">
-            <div class="modal-body">
-              <input type="text" name="name" placeholder="이름" class="form-control mb-2" required>
-              <input type="text" name="student_id" placeholder="교번" class="form-control mb-2" required>
-              <input type="password" name="password" placeholder="비밀번호" class="form-control mb-2" required>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-success">가입하기</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 예약 모달 -->
-    <div id="reserveModal" class="modal" style="display:none;">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">예약하기</h5>
-            <button type="button" class="btn-close" onclick="closeReserveModal()"></button>
-          </div>
-          <form action="/reserve" method="POST">
-            <div class="modal-body">
-              <select name="booth" class="form-control mb-2" required>
-                <option value="도그파이트">도그파이트</option>
-                <option value="면 위의 남자들">면 위의 남자들</option>
-                <option value="초코딸기">초코딸기</option>
-              </select>
-              <input type="number" name="people" placeholder="인원 수" class="form-control mb-2" required>
-              <input type="text" name="time" placeholder="예약 시간" class="form-control mb-2" required>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-warning">예약하기</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    
-    <script>
-      function openLoginModal() {
-        document.getElementById('loginModal').style.display = 'block';
-      }
-      function closeLoginModal() {
-        document.getElementById('loginModal').style.display = 'none';
-      }
-      function openRegisterModal() {
-        document.getElementById('registerModal').style.display = 'block';
-      }
-      function closeRegisterModal() {
-        document.getElementById('registerModal').style.display = 'none';
-      }
-      function openReserveModal() {
-        document.getElementById('reserveModal').style.display = 'block';
-      }
-      function closeReserveModal() {
-        document.getElementById('reserveModal').style.display = 'none';
-      }
-    </script>
+        function openRegisterModal() {
+          document.getElementById('registerModal').style.display = 'block';
+        }
+        function closeRegisterModal() {
+          document.getElementById('registerModal').style.display = 'none';
+        }
+        function openReserveModal() {
+          document.getElementById('reserveModal').style.display = 'block';
+        }
+        function closeReserveModal() {
+          document.getElementById('reserveModal').style.display = 'none';
+        }
+      </script>
+  
     </div>
   </header>
-
+  
   <main class="main">
 
     <!-- Hero Section -->
