@@ -3,18 +3,21 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const path = require('path');
-const db = require('./db'); // db.js는 따로 있어야 합니다
+const db = require('./db'); // db.js는 같은 backend 폴더 안에 있어야 함
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ✅ 정적 파일 서빙 (public 폴더)
 app.use(express.static(path.join(__dirname, '../public')));
+
+// ✅ 홈페이지 루트
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-// 미들웨어 설정
+// 📦 미들웨어 설정
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
 
 app.use(session({
   secret: 'festival-secret-key',
@@ -22,7 +25,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
-// 회원가입
+// ✅ 회원가입
 app.post('/register', async (req, res) => {
   const { name, student_id, password } = req.body;
   const hash = await bcrypt.hash(password, 10);
@@ -35,14 +38,13 @@ app.post('/register', async (req, res) => {
         return res.send('❗ 이미 가입된 교번이거나 서버 오류입니다.');
       }
 
-      // 자동 로그인은 유지하되, 예약 페이지 대신 홈페이지로 리디렉션
       req.session.userId = this.lastID;
-      res.redirect('/');  // ← 여기에서 reserve.html 대신 홈페이지로!
+      res.redirect('/');
     }
   );
 });
 
-// 로그인
+// ✅ 로그인
 app.post('/login', (req, res) => {
   const { student_id, password } = req.body;
 
@@ -55,13 +57,12 @@ app.post('/login', (req, res) => {
     if (!match) return res.send('❌ 비밀번호가 일치하지 않습니다.');
 
     req.session.userId = user.id;
-    req.session.userName = user.name;  // 💡 사용자 이름 저장
-    res.redirect('/');  // ✅ 홈페이지로 리다이렉트
+    req.session.userName = user.name;
+    res.redirect('/');
   });
 });
 
-
-// 예약
+// ✅ 예약
 app.post('/reserve', (req, res) => {
   if (!req.session.userId) {
     return res.status(401).send('❗ 로그인 후 이용해주세요.');
@@ -81,7 +82,7 @@ app.post('/reserve', (req, res) => {
   );
 });
 
-// 로그인한 사용자 정보 반환 API
+// ✅ 로그인한 사용자 정보 반환
 app.get('/user-info', (req, res) => {
   if (req.session.userId && req.session.userName) {
     res.json({ loggedIn: true, name: req.session.userName });
@@ -90,16 +91,14 @@ app.get('/user-info', (req, res) => {
   }
 });
 
+// ✅ 로그아웃
 app.get('/logout', (req, res) => {
   req.session.destroy(() => {
     res.redirect('/');
   });
 });
 
-
-// 서버 시작
-// 서버 시작
-app.listen(process.env.PORT || 3000, () => {
+// ✅ 서버 실행
+app.listen(PORT, () => {
   console.log(`✅ 서버 실행 중: http://localhost:${PORT}`);
 });
-
