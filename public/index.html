@@ -39,6 +39,7 @@
   ======================================================== -->
 </head>
 
+
 <body class="index-page">
   
   <header id="header" class="header d-flex align-items-center sticky-top">
@@ -75,99 +76,92 @@
         </div>
       </nav>
       
-      <script>
-        function toggleMobileMenu() {
-          const mobileNav = document.getElementById('mobile-nav');
-          mobileNav.classList.toggle('d-none');
-        }
-      
-        window.onload = async function () {
-          const res = await fetch('/user-info');
-          const data = await res.json();
-          const nav = document.getElementById('nav-login-area');
-          const mobile = document.getElementById('mobile-login-area');
-      
-          if (data.loggedIn) {
-            const html = `
-              <div class="d-flex flex-column align-items-end">
-                <span class="text-white fw-bold">${data.name}님 환영합니다!</span>
-                <form action="/logout" method="POST" class="mt-1">
-                  <button type="submit" class="btn btn-sm btn-outline-light">로그아웃</button>
-                </form>
-              </div>`;
-            nav.innerHTML = html;
-            mobile.innerHTML = `
-              <div class="d-flex flex-column align-items-center text-white gap-2">
-                <span class="fw-bold">${data.name}님 환영합니다!</span>
-                <form action="/logout" method="POST">
-                  <button type="submit" class="btn btn-outline-light btn-sm">로그아웃</button>
-                </form>
-              </div>`;
-          } else {
-            const html = `
-              <div class="d-flex flex-column flex-sm-row gap-2">
-                <button class="btn btn-outline-primary btn-sm" onclick="openLoginModal()">로그인</button>
-                <button class="btn btn-outline-success btn-sm" onclick="openRegisterModal()">회원가입</button>
-              </div>`;
-            nav.innerHTML = html;
-            mobile.innerHTML = `
-              <div class="d-flex flex-column align-items-center gap-2 mt-3">
-                <button class="btn btn-outline-light btn-sm w-75" onclick="openLoginModal()">로그인</button>
-                <button class="btn btn-outline-light btn-sm w-75" onclick="openRegisterModal()">회원가입</button>
-              </div>`;
-          }
-        }
-      </script>
       
       <style>
         @media (max-width: 768px) {
           #navmenu ul {
             display: none !important;
           }
+      
           #nav-login-area {
             display: none !important;
           }
+      
           #mobile-nav a {
             color: white;
             font-size: 1.2rem;
             margin: 1rem 0;
-            text-decoration: none;
           }
-          #mobile-login-area button {
+      
+          #mobile-login-area {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
             color: white;
-            border-color: white;
           }
-          #mobile-login-area button:hover {
-            background-color: white;
-            color: black;
+      
+          #mobile-login-area form {
+            margin: 0;
+          }
+      
+          #mobile-login-area .btn {
+            width: 80%;
+            max-width: 200px;
           }
         }
       </style>
       
-      
-      
-      <!-- ✅ 스크립트는 ul 밖에 두세요! -->
       <script>
-        window.onload = async function () {
+        function toggleMobileMenu() {
+          const mobileNav = document.getElementById('mobile-nav');
+          mobileNav.classList.toggle('d-none');
+        }
+      
+        async function updateNav() {
           const res = await fetch('/user-info');
           const data = await res.json();
-      
           const nav = document.getElementById('nav-login-area');
+          const mobile = document.getElementById('mobile-login-area');
       
           if (data.loggedIn) {
+            // PC용
             nav.innerHTML = `
-              <span class="text-black fw-bold me-2">${data.name}님 환영합니다!</span>
-              <a href="/logout" class="btn btn-outline-light btn-sm">로그아웃</a>
-            `;
+              <div class="d-flex flex-column align-items-end">
+                <span class="text-white fw-bold">${data.name}님 환영합니다!</span>
+                <form action="/logout" method="POST" class="mt-1">
+                  <button type="submit" class="btn btn-sm btn-outline-light">로그아웃</button>
+                </form>
+              </div>`;
+      
+            // 모바일용
+            mobile.innerHTML = `
+              <div class="d-flex flex-column align-items-center text-white gap-2 mt-3">
+                <span class="fw-bold">${data.name}님 환영합니다!</span>
+                <form action="/logout" method="POST">
+                  <button type="submit" class="btn btn-outline-light btn-sm w-75">로그아웃</button>
+                </form>
+              </div>`;
           } else {
+            // PC용
             nav.innerHTML = `
-              <button class="btn btn-outline-primary btn-sm me-2" onclick="openLoginModal()">로그인</button>
-              <button class="btn btn-outline-success btn-sm" onclick="openRegisterModal()">회원가입</button>
-            `;
+              <div class="d-flex flex-column flex-sm-row gap-2">
+                <button class="btn btn-outline-primary btn-sm" onclick="openLoginModal()">로그인</button>
+                <button class="btn btn-outline-success btn-sm" onclick="openRegisterModal()">회원가입</button>
+              </div>`;
+      
+            // 모바일용 - 메뉴 닫히게 추가
+            mobile.innerHTML = `
+              <div class="d-flex flex-column align-items-center gap-2 mt-3">
+                <button class="btn btn-outline-light btn-sm w-75" onclick="toggleMobileMenu(); openLoginModal()">로그인</button>
+                <button class="btn btn-outline-light btn-sm w-75" onclick="toggleMobileMenu(); openRegisterModal()">회원가입</button>
+              </div>`;
           }
         }
-      </script>
       
+        window.onload = updateNav;
+      </script>
       
 
     <!-- 로그인 모달 -->
