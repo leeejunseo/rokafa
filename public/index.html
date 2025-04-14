@@ -72,7 +72,8 @@
           <a href="#events" onclick="toggleMobileMenu()">초청 연예인</a>
           <a href="#gallery" onclick="toggleMobileMenu()">타임라인</a>
           <a href="#contact" onclick="toggleMobileMenu()">마무리</a>
-          <div id="mobile-login-area" class="mt-4"></div>
+          <a href="javascript:void(0)" onclick="closeMenuAndLogin()">로그인</a>
+          <a href="javascript:void(0)" onclick="closeMenuAndRegister()">회원가입</a>
         </div>
       </nav>
       
@@ -80,49 +81,6 @@
         function toggleMobileMenu() {
           const mobileNav = document.getElementById('mobile-nav');
           mobileNav.classList.toggle('d-none');
-        }
-      
-        window.onload = async function () {
-          const res = await fetch('/user-info');
-          const data = await res.json();
-          const nav = document.getElementById('nav-login-area');
-          const mobile = document.getElementById('mobile-login-area');
-      
-          if (!nav || !mobile) return; // ❗ 안전장치
-      
-          if (data.loggedIn) {
-            const htmlDesktop = `
-              <div class="d-flex flex-column align-items-end">
-                <span class="text-white fw-bold">${data.name}님 환영합니다!</span>
-                <form action="/logout" method="POST" class="mt-1">
-                  <button type="submit" class="btn btn-sm btn-outline-light">로그아웃</button>
-                </form>
-              </div>`;
-            const htmlMobile = `
-              <div class="d-flex flex-column align-items-center text-white gap-2 mt-3">
-                <span class="fw-bold">${data.name}님 환영합니다!</span>
-                <form action="/logout" method="POST">
-                  <button type="submit" class="btn btn-outline-light btn-sm w-75">로그아웃</button>
-                </form>
-              </div>`;
-      
-            nav.innerHTML = htmlDesktop;
-            mobile.innerHTML = htmlMobile;
-          } else {
-            const htmlDesktop = `
-              <div class="d-flex flex-column flex-sm-row gap-2">
-                <button class="btn btn-outline-primary btn-sm" onclick="closeMenuAndLogin()">로그인</button>
-                <button class="btn btn-outline-success btn-sm" onclick="closeMenuAndRegister()">회원가입</button>
-              </div>`;
-            const htmlMobile = `
-              <div class="d-flex flex-column align-items-center gap-2 mt-3">
-                <button class="btn btn-outline-light btn-sm w-75" onclick="closeMenuAndLogin()">로그인</button>
-                <button class="btn btn-outline-light btn-sm w-75" onclick="closeMenuAndRegister()">회원가입</button>
-              </div>`;
-      
-            nav.innerHTML = htmlDesktop;
-            mobile.innerHTML = htmlMobile;
-          }
         }
       
         function closeMenuAndLogin() {
@@ -134,6 +92,28 @@
           toggleMobileMenu();
           openRegisterModal();
         }
+      
+        window.addEventListener("DOMContentLoaded", async () => {
+          const res = await fetch('/user-info');
+          const data = await res.json();
+          const nav = document.getElementById('nav-login-area');
+      
+          if (data.loggedIn) {
+            nav.innerHTML = `
+              <div class="d-flex flex-column align-items-end">
+                <span class="text-white fw-bold">${data.name}님 환영합니다!</span>
+                <form action="/logout" method="POST" class="mt-1">
+                  <button type="submit" class="btn btn-sm btn-outline-light">로그아웃</button>
+                </form>
+              </div>`;
+          } else {
+            nav.innerHTML = `
+              <div class="d-flex flex-column flex-sm-row gap-2">
+                <button class="btn btn-outline-primary btn-sm" onclick="openLoginModal()">로그인</button>
+                <button class="btn btn-outline-success btn-sm" onclick="openRegisterModal()">회원가입</button>
+              </div>`;
+          }
+        });
       </script>
       
       <style>
@@ -151,25 +131,9 @@
             font-size: 1.2rem;
             margin: 1rem 0;
           }
-      
-          #mobile-login-area {
-            display: flex !important;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            color: white;
-          }
-      
-          #mobile-login-area form {
-            margin: 0;
-          }
-      
-          #mobile-login-area .btn {
-            width: 80%;
-            max-width: 200px;
-          }
         }
       </style>
+      
 
 
     <!-- 로그인 모달 -->
