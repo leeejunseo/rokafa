@@ -64,7 +64,7 @@
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list" onclick="toggleMobileMenu()"></i>
       
-        <div id="mobile-nav" class="d-xl-none d-none flex-column align-items-center text-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-90 z-3" style="padding-top: 5rem;">
+        <div id="mobile-nav" class="d-none d-xl-none flex-column align-items-center text-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-90 z-3" style="padding-top: 5rem;">
           <button class="btn-close btn-close-white position-absolute top-0 end-0 m-4" aria-label="Close" onclick="toggleMobileMenu()"></button>
           <a href="#hero" onclick="toggleMobileMenu()">홈</a>
           <a href="#about" onclick="toggleMobileMenu()">공지사항</a>
@@ -76,6 +76,57 @@
         </div>
       </nav>
       
+      <script>
+        function toggleMobileMenu() {
+          const mobileNav = document.getElementById('mobile-nav');
+          mobileNav.classList.toggle('d-none');
+        }
+      
+        window.addEventListener("DOMContentLoaded", async () => {
+          const res = await fetch('/user-info');
+          const data = await res.json();
+          const nav = document.getElementById('nav-login-area');
+          const mobile = document.getElementById('mobile-login-area');
+      
+          if (data.loggedIn) {
+            nav.innerHTML = `
+              <div class="d-flex flex-column align-items-end">
+                <span class="text-white fw-bold">${data.name}님 환영합니다!</span>
+                <form action="/logout" method="POST" class="mt-1">
+                  <button type="submit" class="btn btn-sm btn-outline-light">로그아웃</button>
+                </form>
+              </div>`;
+            mobile.innerHTML = `
+              <div class="d-flex flex-column align-items-center text-white gap-2 mt-3">
+                <span class="fw-bold">${data.name}님 환영합니다!</span>
+                <form action="/logout" method="POST">
+                  <button type="submit" class="btn btn-outline-light btn-sm w-75">로그아웃</button>
+                </form>
+              </div>`;
+          } else {
+            nav.innerHTML = `
+              <div class="d-flex flex-column flex-sm-row gap-2">
+                <button class="btn btn-outline-primary btn-sm" onclick="closeMenuAndLogin()">로그인</button>
+                <button class="btn btn-outline-success btn-sm" onclick="closeMenuAndRegister()">회원가입</button>
+              </div>`;
+            mobile.innerHTML = `
+              <div class="d-flex flex-column align-items-center gap-2 mt-3">
+                <button class="btn btn-outline-light btn-sm w-75" onclick="closeMenuAndLogin()">로그인</button>
+                <button class="btn btn-outline-light btn-sm w-75" onclick="closeMenuAndRegister()">회원가입</button>
+              </div>`;
+          }
+        });
+      
+        function closeMenuAndLogin() {
+          toggleMobileMenu();
+          openLoginModal();
+        }
+      
+        function closeMenuAndRegister() {
+          toggleMobileMenu();
+          openRegisterModal();
+        }
+      </script>
       
       <style>
         @media (max-width: 768px) {
@@ -112,56 +163,6 @@
           }
         }
       </style>
-      
-      <script>
-        function toggleMobileMenu() {
-          const mobileNav = document.getElementById('mobile-nav');
-          mobileNav.classList.toggle('d-none');
-        }
-      
-        async function updateNav() {
-          const res = await fetch('/user-info');
-          const data = await res.json();
-          const nav = document.getElementById('nav-login-area');
-          const mobile = document.getElementById('mobile-login-area');
-      
-          if (data.loggedIn) {
-            // PC용
-            nav.innerHTML = `
-              <div class="d-flex flex-column align-items-end">
-                <span class="text-white fw-bold">${data.name}님 환영합니다!</span>
-                <form action="/logout" method="POST" class="mt-1">
-                  <button type="submit" class="btn btn-sm btn-outline-light">로그아웃</button>
-                </form>
-              </div>`;
-      
-            // 모바일용
-            mobile.innerHTML = `
-              <div class="d-flex flex-column align-items-center text-white gap-2 mt-3">
-                <span class="fw-bold">${data.name}님 환영합니다!</span>
-                <form action="/logout" method="POST">
-                  <button type="submit" class="btn btn-outline-light btn-sm w-75">로그아웃</button>
-                </form>
-              </div>`;
-          } else {
-            // PC용
-            nav.innerHTML = `
-              <div class="d-flex flex-column flex-sm-row gap-2">
-                <button class="btn btn-outline-primary btn-sm" onclick="openLoginModal()">로그인</button>
-                <button class="btn btn-outline-success btn-sm" onclick="openRegisterModal()">회원가입</button>
-              </div>`;
-      
-            // 모바일용 - 메뉴 닫히게 추가
-            mobile.innerHTML = `
-              <div class="d-flex flex-column align-items-center gap-2 mt-3">
-                <button class="btn btn-outline-light btn-sm w-75" onclick="toggleMobileMenu(); openLoginModal()">로그인</button>
-                <button class="btn btn-outline-light btn-sm w-75" onclick="toggleMobileMenu(); openRegisterModal()">회원가입</button>
-              </div>`;
-          }
-        }
-      
-        window.onload = updateNav;
-      </script>
       
 
     <!-- 로그인 모달 -->
