@@ -93,6 +93,8 @@ app.get('/logout', (req, res) => {
 
 
 // 서버 시작
-app.listen(PORT, () => {
+// 서버 시작
+app.listen(process.env.PORT || 3000, () => {
   console.log(`✅ 서버 실행 중: http://localhost:${PORT}`);
 });
+
