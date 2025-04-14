@@ -52,40 +52,59 @@
       </a>
 
       <nav id="navmenu" class="navmenu">
-        <ul class="d-flex flex-wrap align-items-center justify-content-between gap-2 w-100">
-          <div class="d-flex flex-wrap align-items-center gap-3">
-            <li><a href="#hero" class="active">홈</a></li>
-            <li><a href="#about">공지사항</a></li>
-            <li><a href="#menu">메인</a></li>
-            <li><a href="#events">초청 연예인</a></li>
-            <li><a href="#gallery">타임라인</a></li>
-            <li><a href="#contact">마무리</a></li>
-          </div>
-          <li id="nav-login-area"></li>
+        <ul class="d-flex align-items-center justify-content-end flex-wrap gap-2 w-100 d-none d-xl-flex">
+          <li><a href="#hero" class="active">홈<br></a></li>
+          <li><a href="#about">공지사항</a></li>
+          <li><a href="#menu">메인</a></li>
+          <li><a href="#events">초청 연예인</a></li>
+          <li><a href="#gallery">타임라인</a></li>
+          <li><a href="#contact">마무리</a></li>
+          <li id="nav-login-area" class="ms-auto text-end"></li>
         </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list" onclick="toggleMobileMenu()"></i>
+      
+        <div id="mobile-nav" class="d-xl-none d-none flex-column align-items-center text-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-90 z-3" style="padding-top: 5rem;">
+          <button class="btn-close btn-close-white position-absolute top-0 end-0 m-4" aria-label="Close" onclick="toggleMobileMenu()"></button>
+          <a href="#hero" onclick="toggleMobileMenu()">홈</a>
+          <a href="#about" onclick="toggleMobileMenu()">공지사항</a>
+          <a href="#menu" onclick="toggleMobileMenu()">메인</a>
+          <a href="#events" onclick="toggleMobileMenu()">초청 연예인</a>
+          <a href="#gallery" onclick="toggleMobileMenu()">타임라인</a>
+          <a href="#contact" onclick="toggleMobileMenu()">마무리</a>
+          <div id="mobile-login-area" class="mt-4"></div>
+        </div>
       </nav>
       
       <script>
+        function toggleMobileMenu() {
+          const mobileNav = document.getElementById('mobile-nav');
+          mobileNav.classList.toggle('d-none');
+        }
+      
         window.onload = async function () {
           const res = await fetch('/user-info');
           const data = await res.json();
           const nav = document.getElementById('nav-login-area');
+          const mobile = document.getElementById('mobile-login-area');
       
           if (data.loggedIn) {
-            nav.innerHTML = `
-              <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-2 text-end">
+            const html = `
+              <div class="d-flex flex-column align-items-end">
                 <span class="text-white fw-bold">${data.name}님 환영합니다!</span>
-                <form action="/logout" method="POST">
+                <form action="/logout" method="POST" class="mt-1">
                   <button type="submit" class="btn btn-sm btn-outline-light">로그아웃</button>
                 </form>
               </div>`;
+            nav.innerHTML = html;
+            mobile.innerHTML = html;
           } else {
-            nav.innerHTML = `
+            const html = `
               <div class="d-flex flex-column flex-sm-row gap-2">
                 <button class="btn btn-outline-primary btn-sm" onclick="openLoginModal()">로그인</button>
                 <button class="btn btn-outline-success btn-sm" onclick="openRegisterModal()">회원가입</button>
               </div>`;
+            nav.innerHTML = html;
+            mobile.innerHTML = html;
           }
         }
       </script>
@@ -93,16 +112,19 @@
       <style>
         @media (max-width: 768px) {
           #navmenu ul {
-            flex-direction: column;
-            align-items: flex-start !important;
+            display: none !important;
           }
           #nav-login-area {
-            margin-left: 0 !important;
-            width: 100%;
-            text-align: left;
+            display: none !important;
+          }
+          #mobile-nav a, #mobile-login-area {
+            color: white;
+            font-size: 1.2rem;
+            margin: 1rem 0;
           }
         }
       </style>
+      
       
       <!-- ✅ 스크립트는 ul 밖에 두세요! -->
       <script>
