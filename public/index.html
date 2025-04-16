@@ -29,14 +29,6 @@
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: Yummy
-  * Template URL: https://bootstrapmade.com/yummy-bootstrap-restaurant-website-template/
-  * Updated: Aug 07 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 
@@ -51,10 +43,9 @@
       <nav id="navmenu" class="navmenu d-flex align-items-center gap-3">
         <!-- 햄버거 버튼 -->
         <i class="mobile-nav-toggle bi bi-list" onclick="toggleMobileMenu()" style="font-size: 2rem; cursor: pointer;"></i>
-      
         <!-- 로그인 후 사용자 이름 & 로그아웃 버튼이 여기 표시됨 -->
         <div id="header-login-area" class="d-flex flex-column align-items-end text-end d-none">
-          <!-- JS로 표시 -->
+        <!-- JS로 표시 -->
         </div>
       
         <!-- 모바일 전체 화면 메뉴 -->
@@ -69,14 +60,20 @@
           
           <div class="mt-4" id="nav-login-area"></div>
         </div>
-      </nav>
-      
-      
+      </nav>    
       <script>
         function toggleMobileMenu() {
-          const mobileNav = document.getElementById('mobile-nav');
-          mobileNav.classList.toggle('d-none');
+        const mobileNav = document.getElementById('mobile-nav');
+        // d-none을 직접 토글하지 말고, 열릴 때 명확하게 d-flex로 설정
+        if (mobileNav.classList.contains('d-none')) {
+          mobileNav.classList.remove('d-none');
+          mobileNav.classList.add('d-flex');
+        } else {
+          mobileNav.classList.remove('d-flex');
+          mobileNav.classList.add('d-none');
         }
+      }
+
   
         function closeMenuAndLogin() {
           toggleMobileMenu();
@@ -128,7 +125,7 @@
 
 
       </script>
-  
+
   <style>
     #mobile-nav a {
       color: white;
@@ -180,7 +177,34 @@
       padding-top: 5rem;
     }
   </style>
-  
+    </div>
+  </header>
+
+  <script>
+    function openLoginModal() {
+      const mobileNav = document.getElementById('mobile-nav');
+      if (!mobileNav.classList.contains('d-none')) {
+        mobileNav.classList.add('d-none'); // 메뉴 닫기
+      }
+      document.getElementById('loginModal').style.display = 'block';
+    }
+
+    function closeLoginModal() {
+      document.getElementById('loginModal').style.display = 'none';
+    }
+    function openRegisterModal() {
+      document.getElementById('registerModal').style.display = 'block';
+    }
+    function closeRegisterModal() {
+      document.getElementById('registerModal').style.display = 'none';
+    }
+    function openReserveModal() {
+      document.getElementById('reserveModal').style.display = 'block';
+    }
+    function closeReserveModal() {
+      document.getElementById('reserveModal').style.display = 'none';
+    }
+  </script>
   
       <!-- 로그인 모달 -->
       <div id="loginModal" class="modal" style="display:none;">
@@ -251,29 +275,6 @@
         </div>
       </div>
   
-      <script>
-        function openLoginModal() {
-          document.getElementById('loginModal').style.display = 'block';
-        }
-        function closeLoginModal() {
-          document.getElementById('loginModal').style.display = 'none';
-        }
-        function openRegisterModal() {
-          document.getElementById('registerModal').style.display = 'block';
-        }
-        function closeRegisterModal() {
-          document.getElementById('registerModal').style.display = 'none';
-        }
-        function openReserveModal() {
-          document.getElementById('reserveModal').style.display = 'block';
-        }
-        function closeReserveModal() {
-          document.getElementById('reserveModal').style.display = 'none';
-        }
-      </script>
-  
-    </div>
-  </header>
   
   <main class="main">
 
@@ -382,9 +383,6 @@
       </div>
 
     </section><!-- /Why Us Section -->
-
-    <!-- Stats Section -->
-
 
     <!-- Menu Section -->
     <section id="menu" class="menu section">
