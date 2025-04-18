@@ -1758,3 +1758,15 @@ section,
   }
 }
 
+/* Swiper 기본 화살표 스타일 변경 */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #d94f4f !important; /* 진한 빨강 */
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  transform: scale(1.2);
+}
