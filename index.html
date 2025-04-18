@@ -30,6 +30,13 @@
   <link href="assets/css/main.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
 
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+  <!-- Swiper JS -->
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+
   <!-- =======================================================
   * Template Name: Yummy
   * Template URL: https://bootstrapmade.com/yummy-bootstrap-restaurant-website-template/
@@ -679,33 +686,50 @@
       
         <section class="festival-schedule">
           <h2>🎉 학교 축제 일정 안내</h2>
-          
-          <div class="day-schedule">
-            <h3>📅 1일차: 5월 17일 (금)</h3>
-            <ul>
-              <li><strong>10:00</strong> 개막식</li>
-              <li><strong>11:00</strong> 동아리 부스 운영 시작</li>
-              <li><strong>13:00</strong> 푸드트럭 존 오픈</li>
-              <li><strong>15:00</strong> 체육대회 (운동장)</li>
-              <li><strong>18:00</strong> 버스킹 공연</li>
-              <li><strong>20:00</strong> 불꽃놀이</li>
-            </ul>
-          </div>
-      
-          <div class="day-schedule">
-            <h3>📅 2일차: 5월 18일 (토)</h3>
-
+        
+          <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+        
+              <div class="swiper-slide">
+                <div class="day-schedule">
+                  <h3>📅 1일차: 5월 17일 (금)</h3>
+                  <ul>
+                    <li><strong>10:00</strong> 개막식</li>
+                    <li><strong>11:00</strong> 동아리 부스 운영 시작</li>
+                    <li><strong>13:00</strong> 푸드트럭 존 오픈</li>
+                    <li><strong>15:00</strong> 체육대회 (운동장)</li>
+                    <li><strong>18:00</strong> 버스킹 공연</li>
+                    <li><strong>20:00</strong> 불꽃놀이</li>
+                  </ul>
+                </div>
+              </div>
+        
+              <div class="swiper-slide">
+                <div class="day-schedule">
+                  <h3>📅 2일차: 5월 18일 (토)</h3>
+                  <ul>
+                    <li><strong>10:00</strong> 플리마켓 오픈</li>
+                    <li><strong>12:00</strong> 먹거리 존 오픈</li>
+                    <li><strong>14:00</strong> 댄스 공연 대회</li>
+                    <li><strong>16:00</strong> 인기 가수 축하 공연</li>
+                    <li><strong>18:00</strong> 경품 추첨 이벤트</li>
+                    <li><strong>20:00</strong> 폐막식 및 단체 사진</li>
+                  </ul>
+                </div>
+              </div>
+        
+            </div>
+        
+            <!-- Optional navigation buttons -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
             
-            <ul>
-              <li><strong>10:00</strong> 플리마켓 오픈</li>
-              <li><strong>12:00</strong> 먹거리 존 오픈</li>
-              <li><strong>14:00</strong> 댄스 공연 대회</li>
-              <li><strong>16:00</strong> 인기 가수 축하 공연</li>
-              <li><strong>18:00</strong> 경품 추첨 이벤트</li>
-              <li><strong>20:00</strong> 폐막식 및 단체 사진</li>
-            </ul>
+            <!-- Optional pagination dots -->
+            <div class="swiper-pagination"></div>
           </div>
         </section>
+        
+        
       </div>
       
 
@@ -797,7 +821,24 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+    loop: false,
+    spaceBetween: 20,
+    slidesPerView: 1.2, // 한 장 반 정도 보이게
+    centeredSlides: true, // 중앙 정렬
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+  });
 
+  </script>
+  
 </body>
 
 </html>
