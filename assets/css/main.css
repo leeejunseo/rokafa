@@ -1770,3 +1770,118 @@ section,
 .swiper-button-prev:hover {
   transform: scale(1.2);
 }
+
+.festival-schedule h2 {
+  text-align: center;
+  font-size: 32px;
+  color: #d94f4f;
+  font-weight: 800;
+  margin-bottom: 30px;
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+}
+
+/* 슬라이더 전체 */
+.swiper {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+}
+
+.swiper-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+}
+
+/* 카드 스타일 */
+.day-schedule {
+  width: 90%;
+  max-width: 500px;
+  background: linear-gradient(135deg, #fff0f5, #ffe4e1);
+  padding: 30px 25px;
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  border: 2px solid #ffb6c1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 0 auto;
+}
+
+/* 호버 애니메이션 */
+.day-schedule:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2);
+}
+
+/* 날짜 타이틀 */
+.day-schedule h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #cc3366;
+  margin-bottom: 20px;
+}
+
+/* 일정 리스트 */
+.day-schedule ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.day-schedule li {
+  font-size: 16px;
+  color: #444;
+  padding: 10px 0;
+  border-bottom: 1px dashed #ffc0cb;
+  display: flex;
+  align-items: center;
+}
+
+.day-schedule li:last-child {
+  border-bottom: none;
+}
+
+/* 시간 강조 */
+.day-schedule li strong {
+  width: 80px;
+  color: #ff69b4;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+/* 반응형 */
+@media (max-width: 600px) {
+  .day-schedule {
+    padding: 20px 18px;
+  }
+
+  .day-schedule h3 {
+    font-size: 18px;
+  }
+
+  .day-schedule li {
+    font-size: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .day-schedule li strong {
+    margin-bottom: 5px;
+  }
+}
+
+/* Swiper 기본 화살표 스타일 변경 */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #d94f4f !important; /* 진한 빨강 */
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  transform: scale(1.2);
+}

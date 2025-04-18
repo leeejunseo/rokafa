@@ -824,9 +824,10 @@
   <script>
     var swiper = new Swiper(".mySwiper", {
       loop: false,
+      slidesPerView: 1,
+      centeredSlides: true,
+      centerInsufficientSlides: true, // 👉 카드 수가 적을 때도 가운데 정렬 유지
       spaceBetween: 30,
-      slidesPerView: 1, // 걸치지 않도록 1장만 보이게
-      centeredSlides: true, // 카드가 가운데 오도록
       navigation: {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev",
@@ -836,6 +837,7 @@
         clickable: true,
       },
     });
+
 
 
   </script>
